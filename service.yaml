@@ -1,0 +1,16 @@
+name: appointments-service
+port: 8600
+lang: python
+description: "appointments-service \u2014 domain: appointments"
+http_deps:
+- patients-service
+- providers-service
+- appointment-slots-service
+- room-booking-service
+- notifications-service
+- audit-log-service
+publishes:
+- appointment.booked
+- appointment.cancelled
+- audit.event
+subscribes: []
