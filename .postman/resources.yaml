@@ -1,0 +1,7 @@
+cloudResources:
+  collections:
+    ../postman/collections/Appointments API: 56966635-d962f754-78b2-412c-b883-dff31b0d01bd
+  specs:
+    ../openapi.yaml: a297eec3-ee6f-439c-b56f-b1ad42184978
+workspace:
+  id: 669d9cd9-0b52-4473-8068-148dbae07f6b
