@@ -30,3 +30,18 @@ def test_audit_emitted_on_create(client, svc):
     client.post(f"/api/{RESOURCE}/", json={"name": "audit-me"})
     topics = [t for t, _, _ in svc.bus.published]
     assert "audit.event" in topics
+
+
+def test_duration_minutes_derived(client):
+    r = client.post(f"/api/{RESOURCE}/", json={
+        "starts_at": "2026-08-20T14:30:00+00:00",
+        "ends_at": "2026-08-20T15:00:00+00:00",
+    })
+    assert r.status_code == 201, r.data
+    assert r.get_json()["duration_minutes"] == 30
+
+
+def test_duration_minutes_absent_without_end(client):
+    r = client.post(f"/api/{RESOURCE}/", json={"starts_at": "2026-08-20T14:30:00+00:00"})
+    assert r.status_code == 201, r.data
+    assert "duration_minutes" not in r.get_json()
