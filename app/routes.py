@@ -33,7 +33,7 @@ def build_blueprint(svc) -> Blueprint:
     def _row_json(row: dict) -> dict:
         return {
             "id": row["id"],
-            "status": row["status"],
+            "state": row["status"],
             "created_at": row["created_at"].isoformat(),
             "updated_at": row["updated_at"].isoformat(),
             **(row["data"] or {}),
