@@ -18,5 +18,6 @@ Follow the `gate-loop` skill, with **appointments-developer** (`.claude/agents/`
 - Never rename or remove a field, path or response that consumers use, and never make an existing request field required (patients-service calls `GET /api/appointments/`): add next to it, or version the API.
 - Never move or rename `openapi.yaml`, `service.yaml` or `app/`, nor the repo or service names.
 - Never call `https://myhealthcare.dev` (production, `servers[0]` in the spec). The collection's `baseUrl` stays `http://localhost:8600`.
+- Never add, change or remove a gate exception (`contract-lint.exceptions` in `quality-gate.yml`): flag the finding for a human instead.
 - No secrets in files.
 - A `not_available` or degraded step is a gap, not a pass: say so in the report.

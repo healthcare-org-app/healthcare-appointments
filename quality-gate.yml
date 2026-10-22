@@ -13,3 +13,9 @@ blockers:
   contract-lint: on_fail
   contract-tests: on_fail
   impact: on_breaking
+
+contract-lint:
+  exceptions:
+    - path: "paths./api/appointments/"
+      issue: "trailing slash"
+      reason: "Real route of appointments-service: the Flask blueprint declares /api/appointments/ and patients-service calls it. Removing the slash is a coordinated migration with that consumer, not a spec edit."

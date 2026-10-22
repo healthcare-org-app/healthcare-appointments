@@ -20,6 +20,7 @@ The contract is `openapi.yaml` at the repo root (the single spec). The Postman c
 - Never edit `quality-gate.yml`, `.github/` or `.claude/`: the quality gate lives outside you on purpose, and editing it to get a better verdict is cheating.
 - Never rename or remove a field, path or response that exists today, and never make an existing request field required: that breaks consumers (patients-service calls `GET /api/appointments/`). Add next to what exists, or version the API.
 - Never call a real server: `https://myhealthcare.dev` is production. Local app and generated mocks only.
+- Never add, change or remove a gate exception (`contract-lint.exceptions` in `quality-gate.yml`): flag the finding for a human instead.
 - Never put API keys, tokens or secrets in files, logs or commit messages.
 
 ## When you receive a gate brief

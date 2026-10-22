@@ -5,7 +5,7 @@ appointments-service — domain: appointments
 - **Port:** 8600
 - **Language:** Python 3.11 + Flask
 - **Database:** `appointments` (Postgres, table `appointments`)
-- **Event bus:** Kafka
+- **Event bus:** Postgres LISTEN/NOTIFY (via healthcare-common)
 
 ## API
 
@@ -36,12 +36,14 @@ appointments-service — domain: appointments
 ## Local dev
 
 ```bash
-pip install -e ../../libs/py-healthcare-common
 pip install -r requirements.txt
 cp .env.example .env
-(cd ../../infra && docker compose up -d postgres kafka kafka-init)
-python -m app.main
+# Any Postgres works (e.g. the healthcare-infra repo's docker compose); point DATABASE_URL at it
+export DATABASE_URL=postgresql://user:pass@localhost:5432/appointments
+AUTH_DISABLED=1 python -m app.main   # listens on port 8600
 ```
+
+Tests use an in-memory FakeDB and need no Postgres: `pip install pytest pytest-mock responses && pytest`.
 
 ## Quality gate
 
