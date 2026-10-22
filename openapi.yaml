@@ -565,7 +565,7 @@ components:
         to the top level. Additional properties are therefore expected, not an error.
       required:
         - id
-        - status
+        - state
         - created_at
         - updated_at
       properties:
@@ -574,7 +574,7 @@ components:
           format: int64
           readOnly: true
           description: Server-assigned primary key.
-        status:
+        state:
           type: string
           description: |
             Lifecycle state. Observed values, in the order the service produces
@@ -629,7 +629,7 @@ components:
       additionalProperties: true
       example:
         id: 2317
-        status: active
+        state: active
         created_at: '2026-08-12T09:14:22.481930+00:00'
         updated_at: '2026-08-12T09:14:22.481930+00:00'
         patient_id: 77
