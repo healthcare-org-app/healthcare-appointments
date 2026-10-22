@@ -1,0 +1,21 @@
+# Config of the Postman agent quality gate: https://github.com/Postman-Devrel/postman-agent-quality-gate
+# The spec and the collection come from .postman/resources.yaml. Everything not set here uses the gate's defaults.
+
+# Name of this API in the Postman Context Graph (to find its consumers).
+impact:
+  api: appointments-service
+
+# Pass at B or better, and block whatever the score on a lint failure,
+# failing contract tests or a breaking change with a known consumer.
+pass_rating: B
+
+blockers:
+  contract-lint: on_fail
+  contract-tests: on_fail
+  impact: on_breaking
+
+contract-lint:
+  exceptions:
+    - path: "paths./api/appointments/"
+      issue: "trailing slash"
+      reason: "Real route of appointments-service: the Flask blueprint declares /api/appointments/ and patients-service calls it. Removing the slash is a coordinated migration with that consumer, not a spec edit."
