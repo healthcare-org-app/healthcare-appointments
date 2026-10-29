@@ -1,12 +1,12 @@
 # Working on this repo
 
-Contract-first Flask API (`openapi.yaml` at the root, code in `app/`, pytest in `tests/`, Postman collection in `postman/`). CI checks: `ci` (pytest) and `quality-gate`, the [Postman agent quality gate](https://github.com/Postman-Devrel/postman-agent-quality-gate) (config `quality-gate.yml`, caller `.github/workflows/quality-gate.yml`). The gate comes from the `postman-agent-quality-gate` Claude Code plugin (enabled in `.claude/settings.json`). For Postman work, see `postman/skills/`.
+Contract-first Flask API (`openapi.yaml` at the root, code in `app/`, pytest in `tests/`, Postman collection in `postman/`). CI checks: `ci` (pytest) and `quality-gate`, the [platform API quality gate](https://github.com/healthcare-org-app/healthcare-api-quality-gate) (config `quality-gate.yml`, caller `.github/workflows/quality-gate.yml`). The gate comes from the `healthcare-api-quality-gate` Claude Code plugin (enabled in `.claude/settings.json`). For Postman work, see `postman/skills/`.
 
 ## The loop for any change to the contract, the code or the Postman objects
 
-Follow the `gate-loop` skill, with **appointments-developer** (`.claude/agents/`) as the coder and `postman-agent-quality-gate:gate-verdict` as the reviewer.
+Follow the `healthcare-api-quality-gate:gate-loop` skill, with **appointments-developer** (`.claude/agents/`) as the coder and `healthcare-api-quality-gate:gate-verdict` as the reviewer.
 
-1. **Branch.** Work on a branch, never on `main`. appointments-developer changes the contract first, then code, tests and the collection, checks locally (`pytest -q`, `npx github:Postman-Devrel/postman-agent-quality-gate#v1 run`), pushes, and reports the branch and the full commit SHA.
+1. **Branch.** Work on a branch, never on `main`. appointments-developer changes the contract first, then code, tests and the collection, checks locally (`pytest -q`, `npx github:healthcare-org-app/healthcare-api-quality-gate#v1 run`), pushes, and reports the branch and the full commit SHA.
 2. **Verdict.** After every push, and on every CI event about a failing `quality-gate` check, call gate-verdict with the branch and that exact SHA. Do not read the CI output yourself and do not fix from the raw event.
 3. **Fix.** If FAILED, give the brief word for word to the **same** appointments-developer (SendMessage), which pushes to the **same branch**. Back to step 2 with the new SHA.
 4. **Stop** after 3 rounds, or on PASSED, and report: rounds, rating per round, what changed, the branch or PR link, and the gaps.
