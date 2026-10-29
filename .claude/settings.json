@@ -1,13 +1,13 @@
 {
   "extraKnownMarketplaces": {
-    "postman-agent-quality-gate": {
+    "healthcare-api-quality-gate": {
       "source": {
         "source": "github",
-        "repo": "Postman-Devrel/postman-agent-quality-gate"
+        "repo": "healthcare-org-app/healthcare-api-quality-gate"
       }
     }
   },
   "enabledPlugins": {
-    "postman-agent-quality-gate@postman-agent-quality-gate": true
+    "healthcare-api-quality-gate@healthcare-api-quality-gate": true
   }
 }
