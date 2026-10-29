@@ -12,7 +12,7 @@ The contract is `openapi.yaml` at the repo root (the single spec). The Postman c
 1. **Contract**: change `openapi.yaml` first. Document every parameter, request body and response (success and errors), with examples. Documented errors say whether the caller can retry or must fix input. Every operation declares a 5xx response.
 2. **Code**: implement it in `app/` (routes in `app/routes.py`), then add pytest tests in `tests/` (they use fakes, no Postgres needed). Keep the code small and in the style of the existing modules.
 3. **Postman**: for any Postman work (requests, assertions), ask for it in plain language and let the Postman plugin route it (the `postman:api-engineer` skill; the skills are also in `postman/skills/`). Every contract operation needs a request in the collection with `pm.test` assertions. `baseUrl` stays `http://localhost:8600`.
-4. **Check locally**: `pytest -q`, then `npx github:Postman-Devrel/postman-agent-quality-gate#v1 run` (needs `postman login` already done). Read `gate-results/report.md`.
+4. **Check locally**: `pytest -q`, then `npx github:healthcare-org-app/healthcare-api-quality-gate#v1 run` (needs `postman login` already done). Read `gate-results/report.md`.
 5. **Ship**: commit with a clear message, `git push -u origin <branch>`. Never push to `main`. Report the branch name and the full commit SHA.
 
 ## Hard rules

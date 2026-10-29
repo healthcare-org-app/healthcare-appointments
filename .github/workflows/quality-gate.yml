@@ -1,4 +1,4 @@
-# Postman agent quality gate: https://github.com/Postman-Devrel/postman-agent-quality-gate
+# Platform API quality gate: https://github.com/healthcare-org-app/healthcare-api-quality-gate
 # Config: quality-gate.yml. Make the "gate / quality-gate" check required to block merges.
 name: quality-gate
 
@@ -9,7 +9,7 @@ on:
 
 jobs:
   gate:
-    uses: Postman-Devrel/postman-agent-quality-gate/.github/workflows/gate.yml@v1
+    uses: healthcare-org-app/healthcare-api-quality-gate/.github/workflows/gate.yml@v1
     secrets:
       POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
     permissions:
