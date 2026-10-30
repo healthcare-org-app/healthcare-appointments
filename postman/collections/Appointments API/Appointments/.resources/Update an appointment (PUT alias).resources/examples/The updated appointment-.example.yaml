@@ -37,7 +37,7 @@ response:
     content: |-
       {
         "id": 2317,
-        "status": "active",
+        "state": "active",
         "created_at": "2026-08-12T09:14:22.481930+00:00",
         "updated_at": "2026-08-12T09:14:22.481930+00:00",
         "patient_id": 77,
