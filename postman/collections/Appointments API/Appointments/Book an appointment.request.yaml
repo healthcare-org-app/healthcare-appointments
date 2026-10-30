@@ -44,9 +44,9 @@ scripts:
     code: |
       function checkAppointment(a) {
         // Envelope fields are the contract consumers rely on; extra keys are expected.
-        pm.expect(a).to.include.all.keys("id", "status", "created_at", "updated_at");
+        pm.expect(a).to.include.all.keys("id", "state", "created_at", "updated_at");
         pm.expect(a.id).to.be.a("number");
-        pm.expect(a.status).to.be.a("string");
+        pm.expect(a.state).to.be.a("string");
       }
       pm.test("201 and the appointment envelope", () => { pm.response.to.have.status(201); checkAppointment(pm.response.json()); });
       // Later requests act on the record created here.
