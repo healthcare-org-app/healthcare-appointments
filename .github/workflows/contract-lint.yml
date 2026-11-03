@@ -1,0 +1,36 @@
+# Checks openapi.yaml with the Postman CLI: governance lint, collection run against a mock, AI readiness.
+name: contract-lint
+
+on:
+  pull_request:
+    paths:
+      - openapi.yaml
+      - postman/**
+      - .github/workflows/contract-lint.yml
+
+permissions:
+  contents: read
+
+jobs:
+  spec-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install Postman CLI
+        run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Log in to Postman
+        run: postman login --with-api-key "$POSTMAN_API_KEY"
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+      # Applies the org governance rules of the linked workspace (.postman/resources.yaml).
+      - name: Lint openapi.yaml
+        run: postman spec lint openapi.yaml --workspace-id 669d9cd9-0b52-4473-8068-148dbae07f6b -f error
+      # Mock generated from the spec, so the collection is checked against the contract, not the live service.
+      - name: Test collection against a mock
+        run: |
+          postman mock generate openapi.yaml -o "$RUNNER_TEMP/mock" -n appointments
+          postman collection run "postman/collections/Appointments API" \
+            --use-mock "{{baseUrl}} mock:$RUNNER_TEMP/mock"
+      # Scores how usable the spec is for AI agents; fails below the threshold (current score: 70).
+      - name: AI readiness
+        run: postman spec ai-readiness openapi.yaml --min-score 70

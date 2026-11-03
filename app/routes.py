@@ -39,7 +39,7 @@ def build_blueprint(svc) -> Blueprint:
             **(row["data"] or {}),
         }
 
-    @bp.get("/")
+    @bp.get("", strict_slashes=False)
     @require_auth(scopes=[f"{RESOURCE}.read"])
     def list_records():
         try:
@@ -65,7 +65,7 @@ def build_blueprint(svc) -> Blueprint:
                    details={"filters": dict(request.args), "returned": len(rows)})
         return jsonify({"count": total, "items": [_row_json(r) for r in rows]})
 
-    @bp.post("/")
+    @bp.post("", strict_slashes=False)
     @require_auth(scopes=[f"{RESOURCE}.write"])
     def create_record():
         payload = request.get_json(silent=True) or {}

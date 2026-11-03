@@ -34,7 +34,7 @@ info:
     > as documented current behaviour, not intended design.
 
     ### Peer enrichment on create
-    `POST /api/appointments/` calls out to peer services to snapshot related
+    `POST /api/appointments` calls out to peer services to snapshot related
     records. Each lookup is best-effort: on failure the response carries a
     `*_warn` string instead of a `*_snapshot` object.
 
@@ -64,7 +64,7 @@ tags:
     description: Unauthenticated liveness and readiness probes.
 
 paths:
-  /api/appointments/:
+  /api/appointments:
     get:
       operationId: listAppointments
       summary: List appointments

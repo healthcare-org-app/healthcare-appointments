@@ -12,7 +12,7 @@ description: |
   `slot_id` exists, is open, or does not collide with another booking.
 
   Publishes: `appointment.booked`, `audit.event` (`appointments.create`).
-url: '{{baseUrl}}/api/appointments/'
+url: '{{baseUrl}}/api/appointments'
 method: POST
 headers:
   - key: X-Request-ID

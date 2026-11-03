@@ -9,7 +9,7 @@ description: |
   is open-ended it cannot be enumerated here.
 
   Publishes: `audit.event` (`appointments.list`).
-url: '{{baseUrl}}/api/appointments/?limit=25&offset=0&status=active'
+url: '{{baseUrl}}/api/appointments?limit=25&offset=0&status=active'
 method: GET
 headers:
   - key: X-Request-ID
