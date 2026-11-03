@@ -11,8 +11,8 @@ appointments-service — domain: appointments
 
 | Method    | Path                       |
 |-----------|----------------------------|
-| GET       | `/api/appointments/`          |
-| POST      | `/api/appointments/`          |
+| GET       | `/api/appointments`           |
+| POST      | `/api/appointments`           |
 | GET       | `/api/appointments/<id>`      |
 | PUT/PATCH | `/api/appointments/<id>`      |
 | DELETE    | `/api/appointments/<id>`      |
