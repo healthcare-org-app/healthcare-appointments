@@ -4,6 +4,8 @@ name: quality-gate
 
 on:
   push:
+    # main is judged by postman-cd.yml: two callers on the same ref would cancel each other (shared concurrency group).
+    branches-ignore: [main]
   pull_request:
   workflow_dispatch:
 
