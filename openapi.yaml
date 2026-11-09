@@ -565,6 +565,7 @@ components:
         to the top level. Additional properties are therefore expected, not an error.
       required:
         - id
+        - state
         - status
         - created_at
         - updated_at
@@ -575,6 +576,15 @@ components:
           readOnly: true
           description: Server-assigned primary key.
         status:
+          type: string
+          deprecated: true
+          description: |
+            Deprecated: use `state`, which carries the same value. Still returned
+            so existing consumers keep working; it will be removed once they have
+            migrated.
+          default: active
+          example: active
+        state:
           type: string
           description: |
             Lifecycle state. Observed values, in the order the service produces
@@ -630,6 +640,7 @@ components:
       example:
         id: 2317
         status: active
+        state: active
         created_at: '2026-08-12T09:14:22.481930+00:00'
         updated_at: '2026-08-12T09:14:22.481930+00:00'
         patient_id: 77

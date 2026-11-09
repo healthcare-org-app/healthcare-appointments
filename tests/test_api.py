@@ -30,3 +30,17 @@ def test_audit_emitted_on_create(client, svc):
     client.post(f"/api/{RESOURCE}/", json={"name": "audit-me"})
     topics = [t for t, _, _ in svc.bus.published]
     assert "audit.event" in topics
+
+
+def test_appointment_state_in_list(client):
+    client.post(f"/api/{RESOURCE}/", json={"name": "s"})
+    item = client.get(f"/api/{RESOURCE}/").get_json()["items"][0]
+    assert item["state"] == "active"
+    assert item["status"] == item["state"]
+
+
+def test_appointment_status_deprecated_alias_on_get(client):
+    created = client.post(f"/api/{RESOURCE}/", json={"name": "s"}).get_json()
+    item = client.get(f"/api/{RESOURCE}/{created['id']}").get_json()
+    assert item["state"] == "active"
+    assert item["status"] == "active"
