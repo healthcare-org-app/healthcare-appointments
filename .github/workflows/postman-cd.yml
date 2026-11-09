@@ -1,0 +1,63 @@
+# Continuous delivery of the Postman workspace: after a merge, push the repo (the source of truth) to the workspace.
+# The gate runs again on main (the merge result is not what the PR tested), then the push depends on it.
+# The API key is a secret of the "postman-prod" Environment, restricted to main and v* tags, never readable from a PR.
+name: postman-cd
+
+on:
+  push:
+    branches: [main]
+    # Only when what the workspace holds changed.
+    paths: [postman/**, .postman/**, openapi.yaml, .github/workflows/postman-cd.yml]
+  workflow_dispatch:
+
+# Never cancel a push in progress: the next run waits.
+concurrency:
+  group: postman-cd
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    uses: healthcare-org-app/healthcare-api-quality-gate/.github/workflows/gate.yml@v1
+    secrets:
+      POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+
+  push:
+    needs: gate
+    runs-on: ubuntu-latest
+    environment: postman-prod
+    permissions:
+      contents: read
+    env:
+      POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+      POSTMAN_CLI_VERSION: 1.85.0
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - name: Install the Postman CLI
+        run: npm install -g "postman-cli@${POSTMAN_CLI_VERSION}" --no-audit --no-fund
+
+      # Read-only, kept as evidence in the logs. It does NOT decide whether to push: the cloud rewrites the collection
+      # and the spec on every push, and the spec is never compared, so --exit-code stays at 1 even right after a push.
+      - name: Diff the repo against the workspace (evidence)
+        run: postman workspace diff --push-strategy default || true
+
+      # "default" creates and updates. Never "force-sync": it deletes in the cloud what is not in the repo.
+      # Pushing again with no change is harmless (it updates the same entities), so no condition on the diff.
+      - name: Push the workspace
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          TITLE="$(git log -1 --pretty=%s)"
+          postman workspace push -y --push-strategy default -m "${COMMIT_SHA::7} ${TITLE}"
+
+      - name: Show the workspace activity
+        run: postman workspace activity
