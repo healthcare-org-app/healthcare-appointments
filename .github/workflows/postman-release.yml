@@ -57,3 +57,10 @@ jobs:
             -i "List appointments" \
             --env-var "baseUrl=${API_BASE_URL}" \
             --env-var "bearerToken=${APPOINTMENTS_API_KEY}"
+
+      # The same read-only check, run from the Postman cloud by the monitor of the workspace (its key is in the
+      # workspace vault, not in this job). The monitor also runs every day at 08:00 Europe/Paris on its own.
+      - name: Run the monitor from the Postman cloud
+        env:
+          MONITOR_ID: 56966635-1f1dc4ef-c876-4ed0-8a22-91fe47cd07e4
+        run: postman monitor run "$MONITOR_ID"
