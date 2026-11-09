@@ -7,6 +7,7 @@ To customize: add domain-specific endpoints below the CRUD block.
 """
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
 
 from flask import Blueprint, jsonify, request, g
@@ -23,6 +24,17 @@ CREATED_EVENT = "appointment.booked"
 UPDATED_EVENT = "appointment.cancelled"
 
 
+def _duration_minutes(data: dict) -> int | None:
+    """Whole minutes between `starts_at` and `ends_at`, or None when not derivable."""
+    try:
+        start = datetime.fromisoformat(str(data["starts_at"]))
+        end = datetime.fromisoformat(str(data["ends_at"]))
+        minutes = int((end - start).total_seconds() // 60)
+    except (KeyError, ValueError, TypeError):
+        return None
+    return minutes if minutes >= 1 else None
+
+
 def build_blueprint(svc) -> Blueprint:
     bp = Blueprint(RESOURCE, __name__, url_prefix=f"/api/{RESOURCE}")
     db, bus, clients = svc.db, svc.bus, svc.clients
@@ -31,13 +43,17 @@ def build_blueprint(svc) -> Blueprint:
         return getattr(g, "principal", {}).get("sub", "anonymous")
 
     def _row_json(row: dict) -> dict:
-        return {
+        out = {
             "id": row["id"],
             "status": row["status"],
             "created_at": row["created_at"].isoformat(),
             "updated_at": row["updated_at"].isoformat(),
             **(row["data"] or {}),
         }
+        minutes = _duration_minutes(row["data"] or {})
+        if minutes is not None:
+            out["duration_minutes"] = minutes
+        return out
 
     @bp.get("/")
     @require_auth(scopes=[f"{RESOURCE}.read"])

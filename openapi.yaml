@@ -620,6 +620,15 @@ components:
           type: object
           additionalProperties: true
           description: Provider record captured from `providers-service` at booking time.
+        duration_minutes:
+          type: integer
+          minimum: 1
+          readOnly: true
+          description: |
+            Length of the appointment in whole minutes. Optional and additive:
+            present only when the record carries both `starts_at` and `ends_at`
+            (derived as their difference, rounded down), absent otherwise.
+          example: 30
         patient_warn:
           type: string
           description: Present instead of `patient_snapshot` when the patient lookup failed.

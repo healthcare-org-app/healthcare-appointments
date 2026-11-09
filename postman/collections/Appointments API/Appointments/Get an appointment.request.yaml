@@ -31,6 +31,8 @@ scripts:
         pm.expect(a).to.include.all.keys("id", "status", "created_at", "updated_at");
         pm.expect(a.id).to.be.a("number");
         pm.expect(a.status).to.be.a("string");
+        // duration_minutes is optional and additive: tolerate its absence, check the type when present.
+        if (a.duration_minutes !== undefined) { pm.expect(a.duration_minutes).to.be.a("number"); pm.expect(Number.isInteger(a.duration_minutes) && a.duration_minutes >= 1).to.be.true; }
       }
       pm.test("200 and the appointment envelope", () => { pm.response.to.have.status(200); checkAppointment(pm.response.json()); });
     language: text/javascript
